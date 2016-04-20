@@ -48,6 +48,11 @@ int main(int argc, const char * argv[]) {
     
     if(filterInput == 0)
     {
+        int increase;
+        
+        std::cout << "By how much do you want to increase blur in the image?" << std::endl;
+        std::cin >> increase;
+        
         anchor = Point(-1,-1);
         delta = 0;
         ddepth = -1;
@@ -62,17 +67,26 @@ int main(int argc, const char * argv[]) {
             filter2D(img, dst, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
             
             imshow(windowName, dst);
-            ind++;
+            
+            if (ind <= increase)
+            {
+                ind++;
+            }
             
         }
     }
     else if (filterInput == 1)
     {
+        int amount;
+        
+        std::cout << "By how much do you want to increase or decrease the brightness?" << std::endl;
+        std::cin >> amount;
+        
         anchor = Point(-1,-1);
-        delta = 0;
+        delta = amount;
         ddepth = -1;
         
-        while(true)
+        while (true)
         {
             c = waitKey(500);
             
@@ -82,9 +96,8 @@ int main(int argc, const char * argv[]) {
             filter2D(img, dst, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
             
             imshow(windowName, dst);
-            delta += 10;
-            
         }
+        
     }
     else
     {
