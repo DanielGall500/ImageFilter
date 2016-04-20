@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     
     std::string imgName = "/Users/dannyg/Desktop/OpenCV/OpenCVTest/Resources/StarryNightRGB.jpg";
     std::string windowName = "Image Filter";
+    int filterInput;
     
     Mat img = imread(imgName);
     Mat dst;
@@ -39,26 +40,56 @@ int main(int argc, const char * argv[]) {
     
     namedWindow(windowName, CV_WINDOW_AUTOSIZE);
     
-    anchor = Point(-1,-1);
-    delta = 0;
-    ddepth = -1;
-    
     int ind = 0;
     int c;
     
-    while (true)
+    std::cout << "Choose a filter: Blur[0]; Brightness[1]" << std::endl;
+    std::cin >> filterInput;
+    
+    if(filterInput == 0)
     {
-        c = waitKey(500);
+        anchor = Point(-1,-1);
+        delta = 0;
+        ddepth = -1;
         
-        if((char)c == 27)
-            break;
+        while (true)
+        {
+            c = waitKey(500);
+
+            kernel_size = 3 + 2 * (ind%5);
+            kernel = Mat::ones(kernel_size, kernel_size, CV_32F) / (float)(kernel_size*kernel_size);
+            
+            filter2D(img, dst, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
+            
+            imshow(windowName, dst);
+            ind++;
+            
+        }
+    }
+    else if (filterInput == 1)
+    {
+        anchor = Point(-1,-1);
+        delta = 0;
+        ddepth = -1;
         
-        kernel_size = 3 + 2 * (ind%5);
-        kernel = Mat::ones(kernel_size, kernel_size, CV_32F) / (float)(kernel_size*kernel_size);
-        
-        filter2D(img, dst, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
-        imshow(windowName, dst);
-        ind++;
+        while(true)
+        {
+            c = waitKey(500);
+            
+            kernel_size = 3 + 2 * (ind%5);
+            kernel = Mat::ones(kernel_size, kernel_size, CV_32F) / (float)(kernel_size*kernel_size);
+            
+            filter2D(img, dst, ddepth, kernel, anchor, delta, BORDER_DEFAULT);
+            
+            imshow(windowName, dst);
+            delta += 10;
+            
+        }
+    }
+    else
+    {
+        std::cout << "No Filter ID Found: " << filterInput << std::endl;
+        return -1;
     }
     
     
